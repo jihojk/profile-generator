@@ -28,9 +28,11 @@ const prompts =[
     }
 ]
 
-async function init(){
+async function init() {
+
     const x = await inquirer
     .prompt(prompts)
+
     .then(async function(userData){
         let ghname = userData.userName;
         let queryUrl = 'https://api.github.com/users/' + ghname;
@@ -66,22 +68,31 @@ async function init(){
 const pdfGenerator = async (ghname) => {
     const userHTML = `./templates/${ghname}.html`;
     console.log("pup" + userHTML)
-    const browswer = await puppeteer.launch();
-    const page = await browswer.newPage();
-    await page.setViewport({width: 600, height: 1050});
+
+    const browser = await puppeteer.launch();
+
+    const page = await browser.newPage();
+
+    await page.setViewport({width: 1050, height: 1050});
+
     const html = fs.readFileSync(userHTML,"utf-8")
+
     await page.setContent(html, {
-        waitUntil: "networkidle2"
+        waitUntil: "networkidle0"
     });
 
     await page.emulateMedia("screen");
+
+    await page.screenshot({path: `./pngs/${ghname}.png`});
+
     await page.pdf({
         path: `./generated-pdfs/${ghname}.pdf`,
         format: "A4",
         pageRanges: '1',
+        preferCSSPageSize: false, 
         printBackground: true
     })
-    await browswer.close()
+    await browser.close()
 }
 
 const program = async () =>{
