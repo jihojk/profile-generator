@@ -25,3 +25,7 @@ fs extra - npm install fs-extra
 ## Links to Application
 https://github.com/jihojk/profile-generator
 https://jihojk.github.io/profile-generator/
+
+# Demo
+![Demo](/profile-generator.gif)
+
